@@ -2,6 +2,7 @@ version: "3.8"
 services:
   es01:
     image: "docker.elastic.co/elasticsearch/elasticsearch-oss:${ES_VERSION}"
+    hostname: es01
     labels:
      co.elastic.logs/module: elasticsearch
     ports:
@@ -9,7 +10,6 @@ services:
       - "9300:9300"
     environment:
       discovery.type: single-node
-      #xpack.security.enabled: false
       ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
     mem_limit: ${ES_MEM_LIMIT}
     volumes:
@@ -26,6 +26,12 @@ services:
       interval: 15s
       timeout: 30s
       retries: 5
+    networks:
+      - es-net
+networks:
+  es-net:
+    name: es-net
+    external: true
 volumes:
   es-data-01:
     driver: local
